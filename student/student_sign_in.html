@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
 
 
         <!-- TODO show errors from form validation -->
@@ -52,10 +52,13 @@
                    Each row will have a checkbox, bound to the app's data 
                    When the checkbox is checked/unchecked, the student will be signed in/out -->
 
-                   <tr v-for="student in students">
+                   <tr v-for="student in students" v-bind:class="{present : student.present, absent: !student.present }">
                         <td>{{student.name}}</td>
                         <td>{{student.starID}}</td>
-                        <td>{{student.present}}</td>
+                        <td>
+                            <input type="checkbox" v-model = "student.present" v-on:change = "arriveOrleft(student)">
+                        </td>
+
                    </tr>
 
                 </table>
@@ -65,6 +68,15 @@
 
         <!-- TODO show a message when student arrives or leaves  -->
 
+        <div class="WelcomeOrByeStudents" v-if ="mostRecentStudent.name">
+
+            <div class="alert alert-success " v-if = "mostRecentStudent.present">
+                Welcome, {{mostRecentStudent.name}}
+            </div>
+            <div class="alert alert-info" v-else = "mostRecentStudent.present">
+                Goodbye, {{mostRecentStudent.name}}. See you soon !
+            </div>
+        </div>
 
     </div>
 
@@ -89,8 +101,8 @@
                     present:false}
                     ],
                     errors:[
-
-                    ]
+                    ],
+                    mostRecentStudent:{}
                 }
             },
             methods:{
@@ -114,10 +126,25 @@
 
                         this.newStudentsName = "";
                         this.newStudentID = "";
+
+                        this.students.sort(function(s1,s2){
+                            if(s1.name.toUpperCase() >s2.name.toUpperCase()){
+                                return 1;
+                            }
+
+                            if(s1.name.toUpperCase() <s2.name.toUpperCase()){
+                                return -1;
+                            }
+
+                            return 0
+                        })
                     }
 
-                    //display errors
 
+
+                },
+                arriveOrleft(student){
+                    this.mostRecentStudent = student
                 }
             }
         })
