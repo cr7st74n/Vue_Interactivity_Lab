@@ -72,6 +72,20 @@
                     <label class="form-check-label" for="media2"> Digital <!-- TODO Display text -->  </label>
                 </div>
 
+                <br>
+
+                <div class="form-group">
+                    <br>
+                    <input id="checkB" type="checkbox" v-model="completed">
+                    <label for="checkB">Did you complete this game?</label>
+                </div>
+
+                <div>
+                    <label for="textA">Notes</label> <br>
+                    <textarea id="textA" rows="4" cols="50" v-model="notes"></textarea>
+                </div>
+
+
                 <div>
                     <!-- TODO Add v-on:click -->
                     <button class="btn btn-primary mt-2" type="button" v-on:click="submit">Add record</button>
@@ -94,6 +108,8 @@
                             <th>How many hours?</th>
                             <th>Type</th>
                             <th>Media</th>
+                            <th>Completed</th>
+                            <th>Notes</th>
                         </tr>
                         <!-- TODO use v-for to create one table row for each activity record -->
                         <tr v-for="record in activityRecords">
@@ -101,6 +117,8 @@
                             <td>{{ record.hours }}</td>
                             <td>{{ record.type }}</td>
                             <td>{{ record.medium }}</td>
+                            <td>{{ record.completed}}</td>
+                            <td>{{ record.notes}}</td>
                         </tr>
                     </table>
                 </div>
@@ -123,6 +141,9 @@
 
     </div>
 
+
+
+
     <script>
 
     //   TODO create new Vue app here
@@ -142,10 +163,14 @@
                     activityRecords: [],
 
                     // Data
-                    types: [ 'FIFA 23', 'Dead By DayLight', 'Rocket League' ],
+                    types: [ 'FIFA 23', 'Dead By DayLight', 'Rocket League' ,"Fall Guys", "Fornite"],
 
                     // Errors 
-                    errors: []
+                    errors: [],
+
+                    completed:true,
+
+                    notes:""
                 }   
             },
             methods: {
@@ -172,7 +197,7 @@
                     }
             
                     if (this.errors.length == 0) {
-                        let newActivity = { date: date, hours: this.hours, type: this.type, medium: this.medium }
+                        let newActivity = { date: date, hours: this.hours, type: this.type, medium: this.medium, completed: this.completed , notes:this.notes}
                         this.activityRecords.push(newActivity)
                         this.activityRecords.sort(function (r1, r2) { 
                             return r1.date.getTime() - r2.date.getTime()
